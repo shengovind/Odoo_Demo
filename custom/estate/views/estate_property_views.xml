@@ -27,10 +27,57 @@
                         <field name='selling_price'/>
                         <field name='date_availability'/>
                     </group>
+                    <notebook>
+                        <page string="page name">
+                            <group>
+                                <group>
+                                    <field name='name'/>
+                                    <field name='bedrooms'/>
+                                </group>
+                                <group>
+                                    <field name='facades'/>
+                                    <field name='living_area'/>
+                                    <field name='name'/>
+                                </group>
+                                <group>
+                                    <field name='expected_price'/>
+                                    <field name='selling_price'/>
+                                    <field name='garage'/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="description">
+                            <group>
+                                <group>
+                                    <field name='name'/>
+                                    <field name='description'/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field> 
     </record>
 
-
+    <record id='estate_property_form_search' model ='ir.ui.view'>
+        <field name='name'>estate.property.search</field>
+        <field name='model'>estate.property</field>
+        <field name='arch' type='xml'>
+            <search>
+                <field name='name'/>
+                <field name='postcode'/>
+                <field name='expected_price'/>
+                <field name='bedrooms'/>
+                <field name='facades'/>
+                <field name='living_area'/>
+                <filter name="Garage Available" string="Garage" domain="[('garage','=',True)]"/>
+                <filter name="More than 10Rs" domain="[('expected_price','>',10)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Bedrooms" name="Bedroomsz" context="{'group_by':'bedrooms'}"/>
+                    <filter string="Gardenz" name='garden' context="{'group_by':'garden'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
 </odoo>
