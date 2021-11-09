@@ -23,9 +23,13 @@
                 <sheet>
                     <group>
                         <field name='name'/>
+                        <field name='estate_property_type_id'/>
                         <field name='expected_price'/>
                         <field name='selling_price'/>
                         <field name='date_availability'/>
+                        <field name='buyer_id'/>
+                        <field name='employee_id'/>
+                        <field name='property_tag_id' widget='many2many_tags'/>
                     </group>
                     <notebook>
                         <page string="page name">
@@ -54,6 +58,11 @@
                                 </group>
                             </group>
                         </page>
+                        <page string="Offers">
+                            <group>
+                                <field name='offers_ids'/>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -80,4 +89,51 @@
             </search>
         </field>
     </record>
+
+    <record id='estate_books_tree_view' model ='ir.ui.view'>
+        <field name='name'>estate.books.tree</field>
+        <field name='model'>estate.books</field>
+        <field name='arch' type='xml'>
+            <tree>
+                <field name='name'/>
+                <field name='description'/>
+                <field name='isbn'/>
+                <field name='date_published'/>
+            </tree>
+        </field> 
+    </record>
+
+    <record id='estate_property_offers_tree_view' model ='ir.ui.view'>
+        <field name='name'>estate.property.offers.tree</field>
+        <field name='model'>estate.property.offers</field>
+        <field name='arch' type='xml'>
+            <tree>
+                <field name='name'/>
+                <field name='offer_person'/>
+                <field name='property_id'/>
+                <field name='price'/>
+                <field name='offer_status'/>
+            </tree>
+        </field> 
+    </record>
+
+    <record id='estate_property_offer_form_view' model ='ir.ui.view'>
+        <field name='name'>estate.property.offers.form</field>
+        <field name='model'>estate.property.offers</field>
+        <field name='arch' type='xml'>
+            <form>
+                <sheet>
+                    <group>
+                        <field name='name'/>
+                        <field name='offer_person'/>
+                        <field name='property_id'/>
+                        <field name='price'/>
+                        <field name='offer_status'/>
+                        <field name='offer_date'/>
+                    </group>
+                </sheet>
+            </form>
+        </field> 
+    </record>
+    
 </odoo>
