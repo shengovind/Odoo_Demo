@@ -26,6 +26,12 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="real_estate_property_tag_action" model="ir.actions.act_window">
+        <field name="name">Property Tags</field>
+        <field name="res_model">estate.property.tag</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
     <menuitem id="menu_real_estate_root" name="Real Estate">
         <menuitem id="menu_real_estate_advertisements" name="Advertisements">
             <menuitem id="menu_real_estate_action" action="real_estate_properties_action"/>
@@ -35,10 +41,25 @@
 
     <menuitem id="menu_real_estate_setting" name="Settings" parent="menu_real_estate_root">
         <menuitem id="menu_real_estate_type_action" action="real_estate_type_action"/>
+        <menuitem id="menu_real_estate_property_tag_action" action="real_estate_property_tag_action"/>
     </menuitem>
+
+    <record id="real_estate_books_category_action" model="ir.actions.act_window">
+        <field name="name">Category</field>
+        <field name="res_model">estate.books.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="real_estate_books_rack_location_action" model="ir.actions.act_window">
+        <field name="name">Rack Location</field>
+        <field name="res_model">estate.books.rack.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 
     <menuitem id="menu_real_estate_books" name="Books" parent="menu_real_estate_root">
         <menuitem id="menu_real_estate_books_action" action="real_estate_books_action"/>
+        <menuitem id="menu_real_estate_books_category_action" action="real_estate_books_category_action"/>
+        <menuitem id="menu_real_estate_books_rack_location_action" action="real_estate_books_rack_location_action"/>
     </menuitem>
 
 </odoo>

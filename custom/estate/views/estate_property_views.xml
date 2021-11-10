@@ -41,6 +41,8 @@
                                 <group>
                                     <field name='facades'/>
                                     <field name='living_area'/>
+                                    <field name='garden_area'/>
+                                    <field name='total_area'/>
                                     <field name='name'/>
                                 </group>
                                 <group>
@@ -103,6 +105,17 @@
         </field> 
     </record>
 
+    <record id='estate_property_tag_tree_view' model ='ir.ui.view'>
+        <field name='name'>estate.property.tag.tree</field>
+        <field name='model'>estate.property.tag</field>
+        <field name='arch' type='xml'>
+            <tree>
+                <field name='name'/>
+                <field name='display'/>
+            </tree>
+        </field> 
+    </record>
+
     <record id='estate_property_offers_tree_view' model ='ir.ui.view'>
         <field name='name'>estate.property.offers.tree</field>
         <field name='model'>estate.property.offers</field>
@@ -135,5 +148,49 @@
             </form>
         </field> 
     </record>
+
+    <record id='estate_books_category_form_view' model ='ir.ui.view'>
+        <field name='name'>estate.books.category.form</field>
+        <field name='model'>estate.books.category</field>
+        <field name='arch' type='xml'>
+            <form>
+                <sheet>
+                    <group>
+                        <field name='name'/>
+                    </group>
+                    <notebook>
+                        <page string="Books in Category">
+                            <group>
+                                <field name='books_id'/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field> 
+    </record>
     
+    <record id='estate_books_rack_location_form_view' model ='ir.ui.view'>
+        <field name='name'>estate.books.rack.location.form</field>
+        <field name='model'>estate.books.rack.location</field>
+        <field name='arch' type='xml'>
+            <form>
+                <sheet>
+                    <group>
+                        <field name='name'/>
+                        <field name='racknumber'/>
+                        <field name='shelfnumber'/>
+                    </group>
+                    <notebook>
+                        <page string="Books in Shelf">
+                            <group>
+                                <field name='books_id'/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field> 
+    </record>
+
 </odoo>

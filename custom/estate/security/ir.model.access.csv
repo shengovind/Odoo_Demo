@@ -4,3 +4,5 @@ access_estate_property_type,access_estate_property_type,model_estate_property_ty
 access_estate_property_tag,access_estate_property_tag,model_estate_property_tag,base.group_user,1,1,1,1
 access_estate_books,access_estate_books,model_estate_books,base.group_user,1,1,1,1
 access_estate_property_offers,access_estate_property_offers,model_estate_property_offers,base.group_user,1,1,1,1
+access_estate_books_category,access_estate_books_category,model_estate_books_category,base.group_user,1,1,1,1
+access_estate_books_rack_location,access_estate_books_rack_location,model_estate_books_rack_location,base.group_user,1,1,1,1
