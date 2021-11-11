@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+import datetime
+from datetime import timedelta
 
 class EstatePropertyType(models.Model):
 	_name = 'estate.property.type'
@@ -23,6 +25,24 @@ class EstatePropertyOffers(models.Model):
 	offer_date = fields.Date(default = lambda self: fields.Datetime.now(), copy=False)
 	offer_status = fields.Selection([('accept','Accepted'),('reject','Rejected')])
 	property_id = fields.Many2one('estate.property')
+	valid_days = fields.Integer(default = 7)
+	valid_till = fields.Date(compute = "_valid_till_date", inverse =  "_inverse_valid_days")
+
+	@api.depends("offer_date","valid_days")
+	def _valid_till_date(self):
+		print("\n\n _valid_till_date called")
+		#This print is only to check the call in command prompt. To see what happens when store=True is used"
+		for record in self:
+			record.valid_till = record.offer_date + datetime.timedelta(days=record.valid_days)
+
+	@api.depends("offer_date","valid_till")
+	def _inverse_valid_days(self):
+		print("\n\n _inverse_valid_days called")
+		#This print is only to check the call in command prompt. To see what happens when store=True is used"
+		for record in self:
+			days = record.valid_till - record.offer_date
+			record.valid_days = days.days
+
 
 class EstateProperty(models.Model):
 	_name = 'estate.property'
@@ -48,6 +68,7 @@ class EstateProperty(models.Model):
 	property_tag_id = fields.Many2many('estate.property.tag', domain="[('display','=',True)]")
 	offers_ids = fields.One2many('estate.property.offers','property_id')
 	total_area = fields.Integer(compute = "_compute_area")
+	best_price = fields.Integer(compute = "_compute_bestprice")
 	#store = True can be used as another argument to force store area
 
 	@api.depends("living_area","garden_area")
@@ -56,5 +77,26 @@ class EstateProperty(models.Model):
 		#This print is only to check the call in command prompt. To see what happens when store=True is used"
 		for record in self:
 			record.total_area = record.garden_area + record.living_area
+
+	@api.depends("offers_ids.price")
+	def _compute_bestprice(self):
+		for record in self:
+			maxprice = 0
+
+			for offers in record.offers_ids:
+				if offers.price > maxprice:
+					maxprice = offers.price
+
+			record.best_price = maxprice
+
+	@api.onchange("garden")
+	def _onchange_garden(self):
+		print("\n\n _onchange_garden called")
+		#This print is only to check the call in command prompt. To see what happens when store=True is used"
+		for record in self:
+			if record.garden:
+				record.garden_area = 10
+			else:
+				record.garden_area = 0
 	
 

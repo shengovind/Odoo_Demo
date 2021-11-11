@@ -30,6 +30,7 @@
                         <field name='buyer_id'/>
                         <field name='employee_id'/>
                         <field name='property_tag_id' widget='many2many_tags'/>
+                        <field name='best_price'/>
                     </group>
                     <notebook>
                         <page string="page name">
@@ -49,6 +50,7 @@
                                     <field name='expected_price'/>
                                     <field name='selling_price'/>
                                     <field name='garage'/>
+                                    <field name='garden'/>
                                 </group>
                             </group>
                         </page>
@@ -101,6 +103,8 @@
                 <field name='description'/>
                 <field name='isbn'/>
                 <field name='date_published'/>
+                <field name='location'/>
+                <field name='category'/>
             </tree>
         </field> 
     </record>
@@ -126,6 +130,9 @@
                 <field name='property_id'/>
                 <field name='price'/>
                 <field name='offer_status'/>
+                <field name='offer_date'/>
+                <field name='valid_days'/>
+                <field name='valid_till'/>
             </tree>
         </field> 
     </record>
@@ -143,6 +150,8 @@
                         <field name='price'/>
                         <field name='offer_status'/>
                         <field name='offer_date'/>
+                        <field name='valid_days'/>
+                        <field name='valid_till'/>
                     </group>
                 </sheet>
             </form>
