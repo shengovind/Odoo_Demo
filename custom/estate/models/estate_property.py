@@ -99,4 +99,4 @@ class EstateProperty(models.Model):
 			else:
 				record.garden_area = 0
 	
-
+#--
