@@ -6,6 +6,8 @@
         <field name="name">Properties</field>
         <field name="res_model">estate.property</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_statefilter':'new'}</field> 
+        <!-- this is used to create default filter from the filter 'statefilter' which is found in search view-->
     </record>
 
     <record id="real_estate_type_action" model="ir.actions.act_window">

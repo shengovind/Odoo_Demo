@@ -6,11 +6,13 @@
         <field name='name'>estate.property.tree</field>
         <field name='model'>estate.property</field>
         <field name='arch' type='xml'>
-            <tree>
+            <tree decoration-success="state=='sold'">
                 <field name='name'/>
                 <field name='expected_price'/>
                 <field name='selling_price'/>
-                <field name='date_availability'/>
+                <field name='state' invisible='1'/>
+                <field name='property_tag_id' widget='many2many_tags'/>
+                <field name='date_availability' optional='show'/>
             </tree>
         </field> 
     </record>
@@ -20,16 +22,23 @@
         <field name='model'>estate.property</field>
         <field name='arch' type='xml'>
             <form>
+                <header>
+                    <button name="sold_action" type="object" string="SOLD" attrs="{'invisible':['|',('state','=','sold'),('state','=','cancel')]}"/>
+                    <button name="cancel_action" type="object" string="CANCEL" attrs="{'invisible':['|',('state','=','sold'),('state','=','cancel')]}"/>
+                    <field name='state' widget='statusbar'/>
+                </header>
                 <sheet>
                     <group>
                         <field name='name'/>
-                        <field name='estate_property_type_id'/>
+                        <!-- <field name='state'/> -->
+                        <field name='estate_property_type_id' options="{'no_create':True,'no_open':True}"/>
                         <field name='expected_price'/>
                         <field name='selling_price'/>
                         <field name='date_availability'/>
                         <field name='buyer_id'/>
                         <field name='employee_id'/>
-                        <field name='property_tag_id' widget='many2many_tags'/>
+                        <!-- <field name='tag_show'/> -->
+                        <field name='property_tag_id' widget='many2many_tags' options="{'color_field':'color'}"/>
                         <field name='best_price'/>
                     </group>
                     <notebook>
@@ -64,7 +73,16 @@
                         </page>
                         <page string="Offers">
                             <group>
-                                <field name='offers_ids'/>
+                                <field name='offers_ids'>
+                                    <tree editable="True"> <!-- this gives option to edit in tree view itself -->
+                                        <field name='name'/>
+                                        <field name='offer_person'/>                                
+                                        <field name='price'/>
+                                        <field name='offer_status'/>
+                                        <button name='offer_status_accept_action' type='object' icon='fa-check' attrs="{'invisible':['|',('offer_status','=','accept'),('offer_status','=','reject')]}"/>
+                                        <button name='offer_status_reject_action' type='object' icon='fa-close' attrs="{'invisible':['|',('offer_status','=','accept'),('offer_status','=','reject')]}"/>
+                                    </tree>
+                                </field>    
                             </group>
                         </page>
                     </notebook>
@@ -83,14 +101,45 @@
                 <field name='expected_price'/>
                 <field name='bedrooms'/>
                 <field name='facades'/>
-                <field name='living_area'/>
-                <filter name="Garage Available" string="Garage" domain="[('garage','=',True)]"/>
+                <field name='living_area' filter_domain="[('living_area','>',self)]"/>  <!-- Search gives exact search on field. FIlter domain gives higher or lower than ... in search -->
+                <filter name="garage" string="Garage" domain="[('garage','=',True)]"/>
+                <filter name="statefilter" string="Available" domain="[('state','=','new')]"/> <!-- Search gives exact search on field. FIlter domain gives higher or lower than ... in search -->
                 <filter name="More than 10Rs" domain="[('expected_price','>',10)]"/>
                 <group expand="0" string="Group By">
                     <filter string="Bedrooms" name="Bedroomsz" context="{'group_by':'bedrooms'}"/>
                     <filter string="Gardenz" name='garden' context="{'group_by':'garden'}"/>
                 </group>
             </search>
+        </field>
+    </record>
+
+    <record id='estate_property_type_form_view' model ='ir.ui.view'>
+        <field name='name'>estate.property.type.form</field>
+        <field name='model'>estate.property.type</field>
+        <field name='arch' type='xml'>
+            <form>
+                <sheet>
+                    <div class='oe_button_box' name='button_box'>
+                        <button type='action' name='%(real_estate_offers_action)d' class='oe_stat_button' icon='fa-book'>
+                            <field name='offer_count' widget='statinfo' string='Offers'/>
+                        </button>
+                    </div>    
+                    <div class='oe_title'>
+                        <h1><field string='Type Name' name='name'/></h1>
+                    </div>
+                    <notebook>
+                        <page string='Properties'>
+                            <field name='property_id'>
+                                <tree>
+                                    <field name='name' string='Property Name'/>
+                                    <field name='selling_price' string='Sale Price'/>
+                                    <field name='state' string='State'/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
         </field>
     </record>
 
@@ -128,7 +177,7 @@
                 <field name='name'/>
                 <field name='offer_person'/>
                 <field name='property_id'/>
-                <field name='price'/>
+                <field name='price' decoration-danger="price &lt; 10000"/>
                 <field name='offer_status'/>
                 <field name='offer_date'/>
                 <field name='valid_days'/>
@@ -150,7 +199,7 @@
                         <field name='price'/>
                         <field name='offer_status'/>
                         <field name='offer_date'/>
-                        <field name='valid_days'/>
+                        <field name='valid_days' readonly="True"/>
                         <field name='valid_till'/>
                     </group>
                 </sheet>
@@ -201,5 +250,24 @@
             </form>
         </field> 
     </record>
+
+
+
+    <!-- Inheritance Views-->
+
+    <record id='inherited_estate_res_partner_form_view' model ='ir.ui.view'>
+        <field name='name'>inherit.estate.res.partner.form.view</field>
+        <field name='model'>res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name='arch' type='xml'>
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page name = 'property_offers' string = "Property Offers">
+                    <field name='offer_ids'/>
+                </page>
+           </xpath>
+        </field> 
+    </record>
+
+
 
 </odoo>
