@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="library_books_action" model="ir.actions.act_window">
+        <field name="name">Books</field>
+        <field name="res_model">library.books</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="library_books_copies_action" model="ir.actions.act_window">
+        <field name="name">Book Copies</field>
+        <field name="res_model">library.books.copies</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="library_books_copies_issuance_action" model="ir.actions.act_window">
+        <field name="name">Book Issuance</field>
+        <field name="res_model">library.books.copies.issue</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_library_root_id" name="Library">
+        <menuitem id="menu_library_books_id" name="Books" action="library_books_action"/>
+        <menuitem id="menu_library_books_copies_id" name="Book Copies" action="library_books_copies_action"/>
+        <menuitem id="menu_library_books_copies_issuance_id" name="Book Issuance" action="library_books_copies_issuance_action"/>
+    </menuitem>
+
+</odoo>
+

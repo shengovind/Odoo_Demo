@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<!-- inherited view -->
+
+    <record id='inherited_library_res_partner_form_view' model ='ir.ui.view'>
+        <field name='name'>inherit.library.res.partner.form.view</field>
+        <field name='model'>res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name='arch' type='xml'>
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page name = 'library_user' string = "Library">
+                    <group>
+                        <field name='library_user'/>
+                    </group>
+                </page>
+           </xpath>
+        </field> 
+    </record>
+
+</odoo>

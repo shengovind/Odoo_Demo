@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_library_books,access_library_books,model_library_books,base.group_user,1,1,1,1
+access_library_books_copies,access_library_books_copies,model_library_books_copies,base.group_user,1,1,1,1
+access_library_books_copies_issue,access_library_books_copies_issue,model_library_books_copies_issue,base.group_user,1,1,1,1

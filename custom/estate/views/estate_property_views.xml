@@ -251,8 +251,6 @@
         </field> 
     </record>
 
-
-
     <!-- Inheritance Views-->
 
     <record id='inherited_estate_res_partner_form_view' model ='ir.ui.view'>
@@ -267,7 +265,5 @@
            </xpath>
         </field> 
     </record>
-
-
 
 </odoo>
