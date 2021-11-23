@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 import datetime
+from datetime import timedelta as td
 from odoo.exceptions import UserError, ValidationError
 
 class Books(models.Model):
@@ -42,7 +43,8 @@ class BooksCopies(models.Model):
         ('instore','In Store'),
         ('issued','Issued'),
         ('lost','Lost')
-    ], default='instore', required=True)
+    ], default='instore', required=True, readonly=True)
+    loser = fields.Many2one('res.partner', readonly=True)
     issuance_id = fields.One2many('library.books.copies.issue','copies_id')
 
     @api.depends('name','books_id.bookname')
@@ -58,20 +60,38 @@ class Issuances(models.Model):
     _description = 'Library Books Copies Issuances'
 
     name = fields.Char(string="Issuance Number", readonly=True, required=True, copy=False, default='New')
-    books_id = fields.Many2one('library.books')
+    books_id = fields.Many2one('library.books', required =True)
+    rel_book_copy_domain = fields.One2many(related='books_id.copies_id')
     user = fields.Many2one('res.partner', required = True, domain=[('library_user','=','True')])
     copies_id = fields.Many2one('library.books.copies')
-    date_of_issue = fields.Date(string='Issuance Date', default = lambda self: fields.Datetime.now(), readonly=True, copy=False)
+    date_of_issue = fields.Date(string='Issuance Date', default = lambda self: fields.Date.today(), readonly=True, copy=False)
     issue_period = fields.Integer(string="Fixed Issue Duration", default=7)
     due_date = fields.Date(string="Due Date", readonly=True, compute='_due_date')
-    returned_date=fields.Date(string='Returned Date', readonly=True)
+    returned_date=fields.Date(string='Returned Date')
     delayed_bool = fields.Boolean(string='Delayed?', readonly=True, compute='_delay_check')
     state = fields.Selection([
         ('issued','Issued'),
-        ('returned','Returned'),
-        ('lost','Lost')
-    ], default='issued', required=True, readonly = True)
+        ('lost','Lost'),
+        ('returned','Returned')
+    ], default='issued', required=True, readonly=True)
+    charges = fields.Integer(string='Charges', compute='_charges_assign')
     
+    @api.depends('due_date','returned_date')
+    def _charges_assign(self):
+        print("\n\n charge assign called \n\n")
+        for record in self:
+            if record.returned_date:
+                diff = record.returned_date - record.due_date
+                count = diff.days
+                if count <= 0:
+                    record.charges = 0
+                elif count <=10:
+                    record.charges = count * 10
+                else:
+                    record.charges = count * 100
+            else:
+                record.charges = 0
+            
     @api.depends('due_date')
     def _delay_check(self):
         print("\n\n delay call \n\n")
@@ -82,7 +102,22 @@ class Issuances(models.Model):
             else:
                 record.delayed_bool = False
 
-    ## Note!!! Depends must always assign. So ensure Else condition is always there to close the requirement
+## Note!!! Depends must always assign. So ensure Else condition is always there to close the requirement
+
+    def return_action(self):
+        for record in self:
+            if record.state == 'lost':
+                raise UserError('Book marked as lost - cannot be returned')
+            record.state = 'returned'
+            record.returned_date = datetime.date.today()
+            record.copies_id.state='instore'
+
+    def lost_action(self):
+        for record in self:
+            if record.state == 'returned':
+                raise UserError('Book is already returned!')
+            record.state = 'lost'
+            record.copies_id.state='lost'
 
     @api.onchange('copies_id')
     def _book_on_copy(self):
@@ -100,10 +135,6 @@ class Issuances(models.Model):
         for record in self:
             if record.books_id != record.copies_id.books_id:
                 raise UserError("Select related book and copy")
-
-    def returned_action(self):
-        for record in self:
-            record.returned_date = fields.Datetime.now()
 
 ##Copied online - need to understand this from ashish
     @api.model

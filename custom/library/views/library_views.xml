@@ -105,6 +105,11 @@
         <field name='model'>library.books.copies.issue</field>
         <field name='arch' type='xml'>
             <form>
+                <header>
+                    <button name="return_action" type="object" string="Returned" attrs="{'invisible':['|',('state','=','returned'),('state','=','lost')]}"/>
+                    <button name="lost_action" type="object" string="Lost" attrs="{'invisible':['|',('state','=','returned'),('state','=','lost')]}"/>
+                    <field name='state' widget='statusbar'/>
+                </header>
                 <sheet>
                     <group>
                         <field name='name'/>
@@ -120,6 +125,10 @@
                             <field name='issue_period'/>
                             <field name='due_date'/>
                             <field name='delayed_bool'/>
+                            <field name='returned_date'/>
+                            <field name='charges'/>
+                            <field name='rel_book_copy_domain' invisible='1'/> 
+                            <!-- this was to see if i can use this to dynamically filter copies_id -->
                         </group>
                     </group>
                 </sheet>
