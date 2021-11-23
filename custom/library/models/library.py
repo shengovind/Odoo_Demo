@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+import datetime
 from odoo.exceptions import UserError, ValidationError
 
 class Books(models.Model):
@@ -10,6 +11,7 @@ class Books(models.Model):
     bookname = fields.Char(required=True, string='Book Name')
     isbn = fields.Char(required=True, string='ISBN')
     edition = fields.Char(required=True, string='Book Edition')
+    author_id = fields.Many2many('res.partner', domain=[('library_author','=','True')])
     copies_id = fields.One2many('library.books.copies','books_id')
     copies_count = fields.Integer(compute='_count_copies')
     # Check if this gets called when bulk upload
@@ -60,25 +62,48 @@ class Issuances(models.Model):
     user = fields.Many2one('res.partner', required = True, domain=[('library_user','=','True')])
     copies_id = fields.Many2one('library.books.copies')
     date_of_issue = fields.Date(string='Issuance Date', default = lambda self: fields.Datetime.now(), readonly=True, copy=False)
-    issue_period = fields.Integer(string="Issue Duration")
+    issue_period = fields.Integer(string="Fixed Issue Duration", default=7)
+    due_date = fields.Date(string="Due Date", readonly=True, compute='_due_date')
+    returned_date=fields.Date(string='Returned Date', readonly=True)
+    delayed_bool = fields.Boolean(string='Delayed?', readonly=True, compute='_delay_check')
     state = fields.Selection([
         ('issued','Issued'),
-        ('delayed','Delayed'),
         ('returned','Returned'),
         ('lost','Lost')
     ], default='issued', required=True, readonly = True)
     
+    @api.depends('due_date')
+    def _delay_check(self):
+        print("\n\n delay call \n\n")
+        for record in self:
+            today = datetime.date.today()
+            if today > record.due_date:
+                record.delayed_bool = True
+            else:
+                record.delayed_bool = False
+
+    ## Note!!! Depends must always assign. So ensure Else condition is always there to close the requirement
+
     @api.onchange('copies_id')
     def _book_on_copy(self):
         for record in self:
             if record.copies_id:
                 record.books_id = record.copies_id.books_id
 
+    @api.depends('date_of_issue','issue_period')
+    def _due_date(self):
+        for record in self:
+            record.due_date = record.date_of_issue + datetime.timedelta(days=record.issue_period)
+
     @api.constrains('books_id','copies_id.books_id')
     def _check_book_copy_relation(self):
         for record in self:
             if record.books_id != record.copies_id.books_id:
                 raise UserError("Select related book and copy")
+
+    def returned_action(self):
+        for record in self:
+            record.returned_date = fields.Datetime.now()
 
 ##Copied online - need to understand this from ashish
     @api.model
@@ -93,3 +118,10 @@ class InheritedUser(models.Model):
     _inherit = 'res.partner'
 
     library_user = fields.Boolean()
+    library_author = fields.Boolean()
+
+    @api.constrains('library_user','library_author')
+    def _check_author_user(self):
+        for record in self:
+            if record.library_user == True and record.library_author ==True:
+                raise ValidationError('Author and User cannot be same person')

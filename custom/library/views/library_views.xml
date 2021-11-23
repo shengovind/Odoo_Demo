@@ -11,6 +11,7 @@
                 <field name='isbn'/>
                 <field name='edition'/>
                 <field name='copies_count'/>
+                <field name='author_id'/>
             </tree>
         </field> 
     </record>
@@ -25,6 +26,7 @@
                         <group>
                             <field name='bookname'/>
                             <field name='isbn'/>
+                            <field name='author_id' widget='many2many_tags'/>
                         </group>
                         <group>
                             <field name='edition'/>
@@ -90,7 +92,9 @@
                 <field name='books_id' string='Book'/>
                 <field name='copies_id' string='Copy ID'/>
                 <field name='date_of_issue'/>
-                <field name='issue_period'/>
+                <field name='delayed_bool' optional='hide'/>
+                <field name='returned_date' optional='hide'/>
+                <field name='due_date'/>
                 <field name='state'/>
             </tree>
         </field> 
@@ -114,6 +118,8 @@
                         <group>
                             <field name='date_of_issue'/>
                             <field name='issue_period'/>
+                            <field name='due_date'/>
+                            <field name='delayed_bool'/>
                         </group>
                     </group>
                 </sheet>
@@ -132,6 +138,7 @@
                 <page name = 'library_user' string = "Library">
                     <group>
                         <field name='library_user'/>
+                        <field name='library_author'/>
                     </group>
                 </page>
            </xpath>
