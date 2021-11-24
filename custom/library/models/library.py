@@ -55,13 +55,21 @@ class BooksCopies(models.Model):
             else:
                 record.display_name = str(record.name) + ' - ' + str(record.books_id.bookname)
 
+    # @api.depends('issuance_id.state')
+    # def _change_copy_state(self):
+    #     for rec in self:
+    #         for issue in rec.issuance_id:
+    #             if issue.state == 'issued':
+    #                 rec.state = 'issued'
+    #Clashes with buttons.. WHat to do?!!
+
 class Issuances(models.Model):
     _name = 'library.books.copies.issue'
     _description = 'Library Books Copies Issuances'
 
     name = fields.Char(string="Issuance Number", readonly=True, required=True, copy=False, default='New')
     books_id = fields.Many2one('library.books', required =True)
-    rel_book_copy_domain = fields.One2many(related='books_id.copies_id')
+    #rel_book_copy_domain = fields.One2many(related='books_id.copies_id') #THIS WAS TO TRY DYNAMIC FILTER
     user = fields.Many2one('res.partner', required = True, domain=[('library_user','=','True')])
     copies_id = fields.Many2one('library.books.copies')
     date_of_issue = fields.Date(string='Issuance Date', default = lambda self: fields.Date.today(), readonly=True, copy=False)

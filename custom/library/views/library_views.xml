@@ -127,7 +127,7 @@
                             <field name='delayed_bool'/>
                             <field name='returned_date'/>
                             <field name='charges'/>
-                            <field name='rel_book_copy_domain' invisible='1'/> 
+                            <!-- <field name='rel_book_copy_domain' invisible='1'/>  -->
                             <!-- this was to see if i can use this to dynamically filter copies_id -->
                         </group>
                     </group>
