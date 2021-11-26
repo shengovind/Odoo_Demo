@@ -251,6 +251,28 @@
         </field> 
     </record>
 
+    <!-- Kanban Views-->
+
+    <record id='estate_property_kanban_view' model ='ir.ui.view'>
+        <field name='name'>estate.property.kanban.view</field>
+        <field name='model'>estate.property</field>
+        <field name='arch' type='xml'>
+            <kanban>
+                <templates>
+                    <t t-name='kanban-box'>
+                        <div class='oe-kanban-global-click'>
+                            <div>
+                                <field name='name'/><br/>
+                                <field name='expected_price'/><br/>
+                                <button name='sold_action' string='Sold' type='object' class='btn btn-primary'>Sold</button><br/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field> 
+    </record>
+
     <!-- Inheritance Views-->
 
     <record id='inherited_estate_res_partner_form_view' model ='ir.ui.view'>
