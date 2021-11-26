@@ -84,6 +84,14 @@ class Issuances(models.Model):
     ], default='issued', required=True, readonly=True)
     charges = fields.Integer(string='Charges', compute='_charges_assign')
     
+    # @api.model
+    # def create(self, values):
+    #     print("\n\n Modified Create Called \n\n")
+    #     res = super(Issuances, self).create(values)
+    #     # obj = self.env['library.books.copies'].search('id','=',self.copies_id.id)
+    #     # obj['state']= 'issued'
+    #     return res
+
     @api.depends('due_date','returned_date')
     def _charges_assign(self):
         print("\n\n charge assign called \n\n")
@@ -99,6 +107,9 @@ class Issuances(models.Model):
                     record.charges = count * 100
             else:
                 record.charges = 0
+
+
+    # This is to write state of other based on issue
             
     @api.depends('due_date')
     def _delay_check(self):
