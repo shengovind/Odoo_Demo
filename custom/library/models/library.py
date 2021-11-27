@@ -71,7 +71,7 @@ class Issuances(models.Model):
     books_id = fields.Many2one('library.books', required =True)
     #rel_book_copy_domain = fields.One2many(related='books_id.copies_id') #THIS WAS TO TRY DYNAMIC FILTER
     user = fields.Many2one('res.partner', required = True, domain=[('library_user','=','True')])
-    copies_id = fields.Many2one('library.books.copies')
+    copies_id = fields.Many2one('library.books.copies', domain=[('state','=','instore')])
     date_of_issue = fields.Date(string='Issuance Date', default = lambda self: fields.Date.today(), readonly=True, copy=False)
     issue_period = fields.Integer(string="Fixed Issue Duration", default=7)
     due_date = fields.Date(string="Due Date", readonly=True, compute='_due_date')
@@ -84,13 +84,6 @@ class Issuances(models.Model):
     ], default='issued', required=True, readonly=True)
     charges = fields.Integer(string='Charges', compute='_charges_assign')
     
-    # @api.model
-    # def create(self, values):
-    #     print("\n\n Modified Create Called \n\n")
-    #     res = super(Issuances, self).create(values)
-    #     # obj = self.env['library.books.copies'].search('id','=',self.copies_id.id)
-    #     # obj['state']= 'issued'
-    #     return res
 
     @api.depends('due_date','returned_date')
     def _charges_assign(self):
@@ -158,10 +151,16 @@ class Issuances(models.Model):
 ##Copied online - need to understand this from ashish
     @api.model
     def create(self, vals):
+        print("\n\n Modified Create Called \n\n")
+
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code(
                 'books.issuance.number') or 'New'
             result = super(Issuances,self).create(vals)
+
+        obj = self.env['library.books.copies'].search([('id','=',result.copies_id.id)])
+        obj['state']= 'issued'
+        
         return result
 
 class InheritedUser(models.Model):
