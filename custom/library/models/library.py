@@ -55,25 +55,16 @@ class BooksCopies(models.Model):
             else:
                 record.display_name = str(record.name) + ' - ' + str(record.books_id.bookname)
 
-    # @api.depends('issuance_id.state')
-    # def _change_copy_state(self):
-    #     for rec in self:
-    #         for issue in rec.issuance_id:
-    #             if issue.state == 'issued':
-    #                 rec.state = 'issued'
-    #Clashes with buttons.. WHat to do?!!
-
 class Issuances(models.Model):
     _name = 'library.books.copies.issue'
     _description = 'Library Books Copies Issuances'
 
     name = fields.Char(string="Issuance Number", readonly=True, required=True, copy=False, default='New')
     books_id = fields.Many2one('library.books', required =True)
-    #rel_book_copy_domain = fields.One2many(related='books_id.copies_id') #THIS WAS TO TRY DYNAMIC FILTER
     user = fields.Many2one('res.partner', required = True, domain=[('library_user','=','True')])
-    copies_id = fields.Many2one('library.books.copies', domain=[('state','=','instore')])
+    copies_id = fields.Many2one('library.books.copies', domain=[('state','=','instore')], required=True)
     date_of_issue = fields.Date(string='Issuance Date', default = lambda self: fields.Date.today(), readonly=True, copy=False)
-    issue_period = fields.Integer(string="Fixed Issue Duration", default=7)
+    issue_period = fields.Integer(string="Fixed Issue Duration", default=7, readonly=True)
     due_date = fields.Date(string="Due Date", readonly=True, compute='_due_date')
     returned_date=fields.Date(string='Returned Date')
     delayed_bool = fields.Boolean(string='Delayed?', readonly=True, compute='_delay_check')
@@ -101,12 +92,10 @@ class Issuances(models.Model):
             else:
                 record.charges = 0
 
-
-    # This is to write state of other based on issue
             
     @api.depends('due_date')
     def _delay_check(self):
-        print("\n\n delay call \n\n")
+        print("\n\n delay checkbox call \n\n")
         for record in self:
             today = datetime.date.today()
             if today > record.due_date:
@@ -142,7 +131,7 @@ class Issuances(models.Model):
         for record in self:
             record.due_date = record.date_of_issue + datetime.timedelta(days=record.issue_period)
 
-    @api.constrains('books_id','copies_id.books_id')
+    @api.constrains('books_id','copies_id')
     def _check_book_copy_relation(self):
         for record in self:
             if record.books_id != record.copies_id.books_id:
