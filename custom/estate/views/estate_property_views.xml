@@ -23,7 +23,7 @@
         <field name='arch' type='xml'>
             <form>
                 <header>
-                    <button name="sold_action" type="object" string="SOLD" attrs="{'invisible':['|',('state','=','sold'),('state','=','cancel')]}"/>
+                    <button name='%(wizard_create_sold_invoice_action)d' type="action" context ="{'default_partner_id':buyer_id}" string="SOLD" attrs="{'invisible':['|',('state','=','sold'),('state','=','cancel')]}"/>
                     <button name="cancel_action" type="object" string="CANCEL" attrs="{'invisible':['|',('state','=','sold'),('state','=','cancel')]}"/>
                     <field name='state' widget='statusbar'/>
                 </header>

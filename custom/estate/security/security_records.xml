@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="estate_module_category_id" model="ir.module.category">
+    <!-- <record id="estate_module_category_id" model="ir.module.category">
         <field name="name">Estate</field>
         <field name="description">Estate Module</field>
         <field name="sequence">50</field>
@@ -15,6 +15,6 @@
     <record id="group_estate_user" model="res.groups">
         <field name="name">Estate User</field>
         <field name="category_id" ref="estate_module_category_id"/>
-    </record>
+    </record> -->
 
 </odoo>

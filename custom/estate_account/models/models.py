@@ -3,12 +3,16 @@
 
 from odoo import models, fields, api
 
+
+#commenting this out since we are trying wizard - have put in base model
+
 class EstateProperty(models.Model):
     _inherit = 'estate.property'
 
     def sold_action(self):
         print('\n\n Button clicked from inherit\n\n')
-
+        
+        super(EstateProperty,self).sold_action()
         for record in self:
             vals = {}
             journal = self.env['account.move'].with_context(default_move_type='out_invoice')._get_default_journal()

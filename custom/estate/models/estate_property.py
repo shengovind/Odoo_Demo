@@ -164,6 +164,13 @@ class EstateProperty(models.Model):
             if record.state == 'cancel':
                 raise UserError("Cannot sell cancelled property")	
             record.state = 'sold'
+            # vals = {}
+            # journal = self.env['account.move'].with_context(default_move_type='out_invoice')._get_default_journal()
+            # vals['partner_id'] = record.buyer_id.id
+            # vals['move_type'] = 'out_invoice'
+            # vals['journal_id'] = journal.id
+            # vals['invoice_line_ids'] = [(0,0,{'name':record.name, 'quantity' : 1 , 'price_unit' : record.selling_price})]
+            # self.env['account.move'].create(vals)
 
     def cancel_action(self):
         print("\n\n Cancel action clicked")
