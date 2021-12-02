@@ -63,5 +63,5 @@
         <menuitem id="menu_real_estate_books_category_action" action="real_estate_books_category_action"/>
         <menuitem id="menu_real_estate_books_rack_location_action" action="real_estate_books_rack_location_action"/>
     </menuitem>
-
+    
 </odoo>

@@ -25,3 +25,5 @@ class M2(models.Model):
 
     pancard = fields.Char()
     aadhaar = fields.Integer()
+
+

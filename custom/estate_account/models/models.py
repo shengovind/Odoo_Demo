@@ -18,6 +18,7 @@ class EstateProperty(models.Model):
             vals['invoice_line_ids'] = [(0,0,{'name':record.name, 'quantity' : 1 , 'price_unit' : record.selling_price})]
             self.env['account.move'].create(vals)
 
+
 # class estate_account(models.Model):
 #     _name = 'estate_account.estate_account'
 #     _description = 'estate_account.estate_account'
