@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- create view for wizard -->
+    <record id="view_reconfirm_accept" model="ir.ui.view">
+        <field name="name">There are multiple offers with same field. Are you sure this is accepted?</field>
+        <field name="model">wizard.reconfirm.accept.offer</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="same_offers"/>
+                </group>
+                <footer>
+                    <button name='yes_button' type='object' class='btn-primary' string="Yes"/>
+                    <button string='No' special='cancel'/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- create action for wizard -->
+    <record id="wizard_reconfirm_accept_action" model="ir.actions.act_window">
+        <field name="name">Reconfirm Accept</field>
+        <field name="res_model">wizard.reconfirm.accept.offer</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+
+</odoo>

@@ -76,10 +76,11 @@
                                 <field name='offers_ids'>
                                     <tree editable="True"> <!-- this gives option to edit in tree view itself -->
                                         <field name='name'/>
-                                        <field name='offer_person'/>                                
+                                        <field name='offer_person' options="{'no_create':True,'no_open':True}"/>                                
                                         <field name='price'/>
-                                        <field name='offer_status'/>
-                                        <button name='offer_status_accept_action' type='object' icon='fa-check' attrs="{'invisible':['|',('offer_status','=','accept'),('offer_status','=','reject')]}"/>
+                                        <field name='offer_status' readonly='1'/>
+                                        <button name='offer_status_accept_action' type="object" icon='fa-check' attrs="{'invisible':['|',('offer_status','=','accept'),('offer_status','=','reject')]}"/>
+                                        <!-- <button name='%(wizard_reconfirm_accept_action)d' type="action" icon='fa-check' attrs="{'invisible':['|',('offer_status','=','accept'),('offer_status','=','reject')]}"/> -->
                                         <button name='offer_status_reject_action' type='object' icon='fa-close' attrs="{'invisible':['|',('offer_status','=','accept'),('offer_status','=','reject')]}"/>
                                     </tree>
                                 </field>    

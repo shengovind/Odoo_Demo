@@ -22,4 +22,3 @@ class CreateSoldInvoice(models.TransientModel):
             (0,0,{'name':'comission', 'quantity' : 1 , 'price_unit' : property.selling_price*6/100})
             ]
             self.env['account.move'].create(vals)
-

@@ -48,15 +48,30 @@ class EstatePropertyOffers(models.Model):
     #this shows how a many to one mapped object can change the one to many object value using mapped id
     #this also shows how one can reference other records in the same list
     def offer_status_accept_action(self):
-        for record in self:
+        # for record in self:
             # if record.offer_status == 'reject':
             # 	raise UserError("Rejected once cannot be accepted again")
             #Better to write the above in onchane - since this gets called only when button is clicked
             #whereas it can be changed from the base model too
+
+            # if 
+
+            # for rec in record.property_id.offers_ids:
+            #         rec.offer_status = 'reject'
             
-            record.offer_status = 'accept'
-            record.property_id.selling_price = record.price
-            record.property_id.buyer_id = record.offer_person
+            # record.offer_status = 'accept'
+            # record.property_id.selling_price = record.price
+            # record.property_id.buyer_id = record.offer_person
+
+        return {
+            "name":"Reconfirm Accept",
+            "type":"ir.actions.act_window",
+            "res_model":"wizard.reconfirm.accept.offer",
+            "view_mode":"form",
+            "target":"new"
+        }
+
+            
 
     def offer_status_reject_action(self):
         for record in self:
@@ -164,13 +179,6 @@ class EstateProperty(models.Model):
             if record.state == 'cancel':
                 raise UserError("Cannot sell cancelled property")	
             record.state = 'sold'
-            # vals = {}
-            # journal = self.env['account.move'].with_context(default_move_type='out_invoice')._get_default_journal()
-            # vals['partner_id'] = record.buyer_id.id
-            # vals['move_type'] = 'out_invoice'
-            # vals['journal_id'] = journal.id
-            # vals['invoice_line_ids'] = [(0,0,{'name':record.name, 'quantity' : 1 , 'price_unit' : record.selling_price})]
-            # self.env['account.move'].create(vals)
 
     def cancel_action(self):
         print("\n\n Cancel action clicked")
