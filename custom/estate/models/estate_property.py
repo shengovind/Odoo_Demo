@@ -47,6 +47,7 @@ class EstatePropertyOffers(models.Model):
     #global methods that will be called using buttons
     #this shows how a many to one mapped object can change the one to many object value using mapped id
     #this also shows how one can reference other records in the same list
+ 
     def offer_status_accept_action(self):
         # for record in self:
             # if record.offer_status == 'reject':
@@ -103,6 +104,7 @@ class EstateProperty(models.Model):
     _order = "id desc"
     
     name = fields.Char(string="Main Name", default = "",required=True)
+    image = fields.Image()
     description = fields.Text()
     postcode = fields.Char()
     date_availability = fields.Date(default = lambda self: fields.Datetime.now(), copy=False)

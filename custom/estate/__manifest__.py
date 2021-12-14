@@ -9,6 +9,8 @@
         'wizard/reconfirm_accept_view.xml',
         'views/estate_menus.xml',
         'wizard/create_sold_invoice_view.xml',
-        'views/estate_property_views.xml'
+        'views/estate_property_views.xml',
+        'report/property_report.xml',
+        'report/property_detail_pdf.xml'
     ],
 }
