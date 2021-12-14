@@ -63,5 +63,15 @@
         <menuitem id="menu_real_estate_books_category_action" action="real_estate_books_category_action"/>
         <menuitem id="menu_real_estate_books_rack_location_action" action="real_estate_books_rack_location_action"/>
     </menuitem>
+
+    <record id="real_estate_reporting_action" model="ir.actions.act_window">
+        <field name="name">Price Report</field>
+        <field name="res_model">estate.books.rack.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_real_estate_reporting" name="Reporting" parent="menu_real_estate_root">
+        <menuitem id="menu_real_estate_reporting_price_report_action" action="wizard_property_report_action"/>
+    </menuitem>    
     
 </odoo>
