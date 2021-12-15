@@ -10,4 +10,15 @@
         <field name="binding_model_id" ref="model_estate_property"/>
         <field name="binding_type">report</field>
     </record>
+
+    <record id="estate_property_report_lang" model="ir.actions.report">
+        <field name="name">Property Report Lang Cust</field>
+        <field name="model">estate.property</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">estate.property_detail_pdf_lang</field>
+        <field name="report_file">estate.property_detail_pdf_lang</field>
+        <field name="print_report_name">'Property Detail Lang- %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_estate_property"/>
+        <field name="binding_type">report</field>
+    </record>
 </odoo>

@@ -11,7 +11,5 @@ class ReportPropertyWizard(models.TransientModel):
         # print(allids)
 
         #SELF ref is used to pull xml id
-        allids = [i.id for i in self.env['estate.property'].search([('expected_price','>=',self.price)])]
-        print(allids)
-        print(self.env.context)
-        return self.env.ref('estate.estate_property_report').report_action(self,allids)
+        allids = self.env['estate.property'].search([('expected_price','>=',self.price)]).ids
+        return self.env.ref('estate.estate_property_report').report_action(allids)
