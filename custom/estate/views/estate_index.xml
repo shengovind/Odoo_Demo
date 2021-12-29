@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <template id="index">
+        <t t-call="website.layout">
+            <t t-set="title">My Estate</t>
+            <div class="oe_structure">
+                <div class="container">
+                    <table class="table">
+                        <tr>
+                            <!-- <th>Reference No</th> -->
+                            <th>Name</th>
+                            <th>Expected Price</th>
+                        </tr>
+                        <t t-foreach="properties" t-as="record">
+                            <tr>
+                                <!-- <td><t t-esc="record.ref_seq"/></td> -->
+                                <td><t t-esc="record.name"/></td>
+                                <td><t t-esc="record.expected_price"/></td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </div>
+        </t>
+        <!-- <title> My Estate Page</title>
+        <h1>Hello World</h1>
+        <ul>
+            <t t-foreach="properties" t-as="record">
+                <li><t t-esc="record.name"/></li>
+            </t>
+        </ul> -->
+    </template>
+</odoo> 

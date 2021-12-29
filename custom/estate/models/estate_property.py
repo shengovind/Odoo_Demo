@@ -100,6 +100,7 @@ class EstatePropertyOffers(models.Model):
 
 class EstateProperty(models.Model):
     _name = 'estate.property'
+    _inherit = "portal.mixin"
     _description = 'Estate Property'
     _order = "id desc"
     
@@ -196,3 +197,8 @@ class EstateProperty(models.Model):
             if record.garden_area > record.living_area:
                 raise ValidationError("Garden Area cannot be more than Living area")
 
+
+    def _compute_access_url(self):
+        super()._compute_access_url()
+        for record in self:
+            record.access_url = '/my/properties/{0}'.format(record.id)
