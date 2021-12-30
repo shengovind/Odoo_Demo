@@ -17,14 +17,18 @@
     
     <template id="portal_my_home_eatate_breadcrumbs" inherit_id="portal.portal_breadcrumbs">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
-            <li t-if = "page_name == 'my_properties'" class="breadcrumb-item">
-                <a>Properties</a>
+            <li t-if = "page_name == 'my_properties' or property" t-attf-class="breadcrumb-item #{'active' if properties else ''}">
+                <a t-if="property" t-attf-href="/my/properties?{{keep_query()}}">Property</a>
+                <t t-else="">Properties</t>
+            </li>
+            <li t-if="property" t-attf-class="breadcrumb-item active">
+                <t t-esc="property.name"></t>
             </li>
         </xpath>
     </template>
         
     <!-- For List view of peroperties -->
-    <template id="portal_my_properties">
+    <template id="portal_my_properties" name="Properties">
         <t t-call="portal.portal_layout">
             <t t-if="properties" t-call="portal.portal_table">
                 <thead>
@@ -42,6 +46,19 @@
                 </t>
             </t>
         </t>
+    </template>
+
+    <!-- For Property page view -->
+    <template id="property_portal_page_view" name="Property Page" inherit_id="portal.portal_sidebar">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+            <div class="row mt16 o_portal_sale_sidebar">
+                <t t-call="portal.portal_record_sidebar">
+                    <t t-set='title'>
+                        <h2><b t-field="property.expected_price"/></h2>
+                    </t>
+                </t>
+            </div>
+        </xpath>
     </template>
 
 </odoo>

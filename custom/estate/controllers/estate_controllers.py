@@ -25,8 +25,9 @@ class MyController(portal.CustomerPortal):
 
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
+        user = request.env.user
         properties = request.env['estate.property']
-        values['total_properties'] = properties.search_count([]) or 0
+        values['total_properties'] = properties.search_count([('owner_id','=',user.partner_id.id)]) or 0
         return values
 
     @http.route('/my/properties', auth='user', website=True)
@@ -42,11 +43,11 @@ class MyController(portal.CustomerPortal):
 
     @http.route('/my/properties/<int:id>', auth='user', website=True)
     def my_property(self, id, **kw):
-        estate = request.env['estate.property'].search(['id','=',id])
+        estate = request.env['estate.property'].search([('id','=',id)])
         values = self._prepare_portal_layout_values()
         values.update({
             'property':estate,
-            'page_name': "llalallallal",
+            'page_name': "my_property",
         })
 
-        return http.request.render('estate.portal_my_properties', values)
+        return http.request.render('estate.property_portal_page_view', values)
